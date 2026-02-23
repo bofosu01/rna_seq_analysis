@@ -1,0 +1,24 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 4
+Rules claiming more threads will be scaled down.
+Job stats:
+job              count
+-------------  -------
+merge_reports        1
+total                1
+
+Select jobs to execute...
+
+[Mon Feb 23 15:52:48 2026]
+rule merge_reports:
+    input: ../OUTPUTS/TEMP/cd.txt, ../OUTPUTS/TEMP/count.txt, ../OUTPUTS/TEMP/sleuth_report.txt, ../OUTPUTS/TEMP/SRR5660030.blast.txt, ../OUTPUTS/TEMP/SRR5660033.blast.txt, ../OUTPUTS/TEMP/SRR5660044.blast.txt, ../OUTPUTS/TEMP/SRR5660045.blast.txt
+    output: ../PipelineReport.txt
+    jobid: 0
+    reason: Missing output files: ../PipelineReport.txt
+    resources: tmpdir=/tmp
+
+[Mon Feb 23 15:52:48 2026]
+Finished job 0.
+1 of 1 steps (100%) done
+Complete log: .snakemake/log/2026-02-23T155247.364629.snakemake.log

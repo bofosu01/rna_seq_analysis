@@ -1,0 +1,7 @@
+Building DAG of jobs...
+MissingInputException in rule merge_reports in file /home/bofosu/rna_seq_analysis/SNAKEMAKE/Snakefile, line 194:
+Missing input files for rule merge_reports:
+    output: ../PipelineReport.txt
+    affected files:
+        ../OUTPUTS/TEMP/count.txt
+        ../OUTPUTS/TEMP/sleuth_report.txt

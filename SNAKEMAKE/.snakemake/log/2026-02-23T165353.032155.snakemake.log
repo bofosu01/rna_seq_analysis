@@ -1,0 +1,262 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 4
+Rules claiming more threads will be scaled down.
+Job stats:
+job                     count
+--------------------  -------
+all                         1
+blast_longest_contig        4
+count_reads                 1
+kallisto_quant              4
+longest_contig              3
+mapping                     3
+merge_reports               1
+sleuth_analysis             1
+total                      18
+
+Select jobs to execute...
+
+[Mon Feb 23 16:53:53 2026]
+rule longest_contig:
+    input: ../OUTPUTS/SPADES/SRR5660033/transcripts.fasta
+    output: ../OUTPUTS/LONGEST_CONTIG/SRR5660033.fasta
+    jobid: 16
+    reason: Missing output files: ../OUTPUTS/LONGEST_CONTIG/SRR5660033.fasta
+    wildcards: sample=SRR5660033
+    resources: tmpdir=/tmp
+
+
+[Mon Feb 23 16:53:53 2026]
+rule kallisto_quant:
+    input: ../OUTPUTS/INDEX/hcmv.idx, ../TESTS/SRR5660045_1.fastq, ../TESTS/SRR5660045_2.fastq
+    output: ../OUTPUTS/QUANT/SRR5660045
+    jobid: 6
+    reason: Missing output files: ../OUTPUTS/QUANT/SRR5660045; Code has changed since last execution
+    wildcards: sample=SRR5660045
+    resources: tmpdir=/tmp
+
+
+[Mon Feb 23 16:53:53 2026]
+rule blast_longest_contig:
+    input: ../OUTPUTS/LONGEST_CONTIG/SRR5660045.fasta, ../BLAST/genome.nhr, ../BLAST/genome.nin, ../BLAST/genome.nsq
+    output: ../OUTPUTS/TEMP/SRR5660045.blast.txt, ../OUTPUTS/TEMP/blast_SRR5660045.done
+    jobid: 25
+    reason: Missing output files: ../OUTPUTS/TEMP/blast_SRR5660045.done, ../OUTPUTS/TEMP/SRR5660045.blast.txt
+    wildcards: sample=SRR5660045
+    resources: tmpdir=/tmp
+
+
+[Mon Feb 23 16:53:53 2026]
+rule longest_contig:
+    input: ../OUTPUTS/SPADES/SRR5660044/transcripts.fasta
+    output: ../OUTPUTS/LONGEST_CONTIG/SRR5660044.fasta
+    jobid: 18
+    reason: Missing output files: ../OUTPUTS/LONGEST_CONTIG/SRR5660044.fasta
+    wildcards: sample=SRR5660044
+    resources: tmpdir=/tmp
+
+[Mon Feb 23 16:53:53 2026]
+Finished job 25.
+1 of 18 steps (6%) done
+Select jobs to execute...
+
+[Mon Feb 23 16:53:53 2026]
+rule longest_contig:
+    input: ../OUTPUTS/SPADES/SRR5660030/transcripts.fasta
+    output: ../OUTPUTS/LONGEST_CONTIG/SRR5660030.fasta
+    jobid: 14
+    reason: Missing output files: ../OUTPUTS/LONGEST_CONTIG/SRR5660030.fasta
+    wildcards: sample=SRR5660030
+    resources: tmpdir=/tmp
+
+[Mon Feb 23 16:53:54 2026]
+Finished job 18.
+2 of 18 steps (11%) done
+Select jobs to execute...
+
+[Mon Feb 23 16:53:54 2026]
+rule blast_longest_contig:
+    input: ../OUTPUTS/LONGEST_CONTIG/SRR5660044.fasta, ../BLAST/genome.nhr, ../BLAST/genome.nin, ../BLAST/genome.nsq
+    output: ../OUTPUTS/TEMP/SRR5660044.blast.txt, ../OUTPUTS/TEMP/blast_SRR5660044.done
+    jobid: 24
+    reason: Missing output files: ../OUTPUTS/TEMP/SRR5660044.blast.txt, ../OUTPUTS/TEMP/blast_SRR5660044.done; Input files updated by another job: ../OUTPUTS/LONGEST_CONTIG/SRR5660044.fasta
+    wildcards: sample=SRR5660044
+    resources: tmpdir=/tmp
+
+[Mon Feb 23 16:53:54 2026]
+Finished job 16.
+3 of 18 steps (17%) done
+Select jobs to execute...
+
+[Mon Feb 23 16:53:54 2026]
+rule kallisto_quant:
+    input: ../OUTPUTS/INDEX/hcmv.idx, ../TESTS/SRR5660030_1.fastq, ../TESTS/SRR5660030_2.fastq
+    output: ../OUTPUTS/QUANT/SRR5660030
+    jobid: 3
+    reason: Missing output files: ../OUTPUTS/QUANT/SRR5660030
+    wildcards: sample=SRR5660030
+    resources: tmpdir=/tmp
+
+[Mon Feb 23 16:53:54 2026]
+Finished job 14.
+4 of 18 steps (22%) done
+Select jobs to execute...
+
+[Mon Feb 23 16:53:54 2026]
+rule blast_longest_contig:
+    input: ../OUTPUTS/LONGEST_CONTIG/SRR5660030.fasta, ../BLAST/genome.nhr, ../BLAST/genome.nin, ../BLAST/genome.nsq
+    output: ../OUTPUTS/TEMP/SRR5660030.blast.txt, ../OUTPUTS/TEMP/blast_SRR5660030.done
+    jobid: 22
+    reason: Missing output files: ../OUTPUTS/TEMP/SRR5660030.blast.txt, ../OUTPUTS/TEMP/blast_SRR5660030.done; Input files updated by another job: ../OUTPUTS/LONGEST_CONTIG/SRR5660030.fasta
+    wildcards: sample=SRR5660030
+    resources: tmpdir=/tmp
+
+[Mon Feb 23 16:53:54 2026]
+Finished job 24.
+5 of 18 steps (28%) done
+Select jobs to execute...
+
+[Mon Feb 23 16:53:54 2026]
+rule blast_longest_contig:
+    input: ../OUTPUTS/LONGEST_CONTIG/SRR5660033.fasta, ../BLAST/genome.nhr, ../BLAST/genome.nin, ../BLAST/genome.nsq
+    output: ../OUTPUTS/TEMP/SRR5660033.blast.txt, ../OUTPUTS/TEMP/blast_SRR5660033.done
+    jobid: 23
+    reason: Missing output files: ../OUTPUTS/TEMP/blast_SRR5660033.done, ../OUTPUTS/TEMP/SRR5660033.blast.txt; Input files updated by another job: ../OUTPUTS/LONGEST_CONTIG/SRR5660033.fasta
+    wildcards: sample=SRR5660033
+    resources: tmpdir=/tmp
+
+[Mon Feb 23 16:53:54 2026]
+Finished job 22.
+6 of 18 steps (33%) done
+Select jobs to execute...
+
+[Mon Feb 23 16:53:54 2026]
+rule kallisto_quant:
+    input: ../OUTPUTS/INDEX/hcmv.idx, ../TESTS/SRR5660033_1.fastq, ../TESTS/SRR5660033_2.fastq
+    output: ../OUTPUTS/QUANT/SRR5660033
+    jobid: 4
+    reason: Missing output files: ../OUTPUTS/QUANT/SRR5660033; Code has changed since last execution
+    wildcards: sample=SRR5660033
+    resources: tmpdir=/tmp
+
+[Mon Feb 23 16:53:54 2026]
+Finished job 23.
+7 of 18 steps (39%) done
+Select jobs to execute...
+
+[Mon Feb 23 16:53:54 2026]
+rule mapping:
+    input: ../OUTPUTS/BOWTIE2_INDEX/hcmv.1.bt2, ../OUTPUTS/BOWTIE2_INDEX/hcmv.2.bt2, ../OUTPUTS/BOWTIE2_INDEX/hcmv.3.bt2, ../OUTPUTS/BOWTIE2_INDEX/hcmv.4.bt2, ../OUTPUTS/BOWTIE2_INDEX/hcmv.rev.1.bt2, ../OUTPUTS/BOWTIE2_INDEX/hcmv.rev.2.bt2, ../TESTS/SRR5660044_1.fastq, ../TESTS/SRR5660044_2.fastq
+    output: ../OUTPUTS/MAPPING/SRR5660044.bam
+    jobid: 10
+    reason: Missing output files: ../OUTPUTS/MAPPING/SRR5660044.bam
+    wildcards: sample=SRR5660044
+    resources: tmpdir=/tmp
+
+[Mon Feb 23 16:53:54 2026]
+Finished job 6.
+8 of 18 steps (44%) done
+Select jobs to execute...
+
+[Mon Feb 23 16:53:54 2026]
+rule mapping:
+    input: ../OUTPUTS/BOWTIE2_INDEX/hcmv.1.bt2, ../OUTPUTS/BOWTIE2_INDEX/hcmv.2.bt2, ../OUTPUTS/BOWTIE2_INDEX/hcmv.3.bt2, ../OUTPUTS/BOWTIE2_INDEX/hcmv.4.bt2, ../OUTPUTS/BOWTIE2_INDEX/hcmv.rev.1.bt2, ../OUTPUTS/BOWTIE2_INDEX/hcmv.rev.2.bt2, ../TESTS/SRR5660033_1.fastq, ../TESTS/SRR5660033_2.fastq
+    output: ../OUTPUTS/MAPPING/SRR5660033.bam
+    jobid: 9
+    reason: Missing output files: ../OUTPUTS/MAPPING/SRR5660033.bam
+    wildcards: sample=SRR5660033
+    resources: tmpdir=/tmp
+
+[Mon Feb 23 16:53:54 2026]
+Finished job 3.
+9 of 18 steps (50%) done
+Select jobs to execute...
+
+[Mon Feb 23 16:53:54 2026]
+rule mapping:
+    input: ../OUTPUTS/BOWTIE2_INDEX/hcmv.1.bt2, ../OUTPUTS/BOWTIE2_INDEX/hcmv.2.bt2, ../OUTPUTS/BOWTIE2_INDEX/hcmv.3.bt2, ../OUTPUTS/BOWTIE2_INDEX/hcmv.4.bt2, ../OUTPUTS/BOWTIE2_INDEX/hcmv.rev.1.bt2, ../OUTPUTS/BOWTIE2_INDEX/hcmv.rev.2.bt2, ../TESTS/SRR5660045_1.fastq, ../TESTS/SRR5660045_2.fastq
+    output: ../OUTPUTS/MAPPING/SRR5660045.bam
+    jobid: 11
+    reason: Missing output files: ../OUTPUTS/MAPPING/SRR5660045.bam
+    wildcards: sample=SRR5660045
+    resources: tmpdir=/tmp
+
+[Mon Feb 23 16:53:55 2026]
+Finished job 4.
+10 of 18 steps (56%) done
+Select jobs to execute...
+
+[Mon Feb 23 16:53:55 2026]
+rule kallisto_quant:
+    input: ../OUTPUTS/INDEX/hcmv.idx, ../TESTS/SRR5660044_1.fastq, ../TESTS/SRR5660044_2.fastq
+    output: ../OUTPUTS/QUANT/SRR5660044
+    jobid: 5
+    reason: Missing output files: ../OUTPUTS/QUANT/SRR5660044; Code has changed since last execution
+    wildcards: sample=SRR5660044
+    resources: tmpdir=/tmp
+
+[Mon Feb 23 16:53:56 2026]
+Finished job 5.
+11 of 18 steps (61%) done
+Select jobs to execute...
+
+[Mon Feb 23 16:53:56 2026]
+rule sleuth_analysis:
+    input: ../OUTPUTS/QUANT/SRR5660030, ../OUTPUTS/QUANT/SRR5660033, ../OUTPUTS/QUANT/SRR5660044, ../OUTPUTS/QUANT/SRR5660045, ../SCRIPTS/sleuth_analysis.R
+    output: ../OUTPUTS/TEMP/sleuth_report.txt
+    jobid: 13
+    reason: Missing output files: ../OUTPUTS/TEMP/sleuth_report.txt; Input files updated by another job: ../OUTPUTS/QUANT/SRR5660033, ../OUTPUTS/QUANT/SRR5660030, ../OUTPUTS/QUANT/SRR5660044, ../OUTPUTS/QUANT/SRR5660045
+    resources: tmpdir=/tmp
+
+[Mon Feb 23 16:53:57 2026]
+Finished job 10.
+12 of 18 steps (67%) done
+[Mon Feb 23 16:53:58 2026]
+Finished job 9.
+13 of 18 steps (72%) done
+[Mon Feb 23 16:53:58 2026]
+Finished job 11.
+14 of 18 steps (78%) done
+Select jobs to execute...
+
+[Mon Feb 23 16:53:58 2026]
+rule count_reads:
+    input: ../OUTPUTS/MAPPING/SRR5660030.bam, ../OUTPUTS/MAPPING/SRR5660033.bam, ../OUTPUTS/MAPPING/SRR5660044.bam, ../OUTPUTS/MAPPING/SRR5660045.bam
+    output: ../OUTPUTS/TEMP/count.txt
+    jobid: 12
+    reason: Missing output files: ../OUTPUTS/TEMP/count.txt; Input files updated by another job: ../OUTPUTS/MAPPING/SRR5660045.bam, ../OUTPUTS/MAPPING/SRR5660044.bam, ../OUTPUTS/MAPPING/SRR5660033.bam; Code has changed since last execution
+    resources: tmpdir=/tmp
+
+[Mon Feb 23 16:53:58 2026]
+Finished job 12.
+15 of 18 steps (83%) done
+[Mon Feb 23 16:54:00 2026]
+Finished job 13.
+16 of 18 steps (89%) done
+Select jobs to execute...
+
+[Mon Feb 23 16:54:00 2026]
+rule merge_reports:
+    input: ../OUTPUTS/TEMP/cd.txt, ../OUTPUTS/TEMP/count.txt, ../OUTPUTS/TEMP/sleuth_report.txt, ../OUTPUTS/TEMP/SRR5660030.blast.txt, ../OUTPUTS/TEMP/SRR5660033.blast.txt, ../OUTPUTS/TEMP/SRR5660044.blast.txt, ../OUTPUTS/TEMP/SRR5660045.blast.txt
+    output: ../PipelineReport.txt
+    jobid: 26
+    reason: Missing output files: ../PipelineReport.txt; Input files updated by another job: ../OUTPUTS/TEMP/SRR5660044.blast.txt, ../OUTPUTS/TEMP/sleuth_report.txt, ../OUTPUTS/TEMP/SRR5660033.blast.txt, ../OUTPUTS/TEMP/count.txt, ../OUTPUTS/TEMP/SRR5660045.blast.txt, ../OUTPUTS/TEMP/SRR5660030.blast.txt
+    resources: tmpdir=/tmp
+
+[Mon Feb 23 16:54:00 2026]
+Finished job 26.
+17 of 18 steps (94%) done
+Select jobs to execute...
+
+[Mon Feb 23 16:54:00 2026]
+localrule all:
+    input: ../OUTPUTS/CDS/hcmv_cds.fasta, ../OUTPUTS/INDEX/hcmv.idx, ../OUTPUTS/QUANT/SRR5660030, ../OUTPUTS/QUANT/SRR5660033, ../OUTPUTS/QUANT/SRR5660044, ../OUTPUTS/QUANT/SRR5660045, ../SCRIPTS/temp.txt, ../OUTPUTS/MAPPING/SRR5660030.bam, ../OUTPUTS/MAPPING/SRR5660033.bam, ../OUTPUTS/MAPPING/SRR5660044.bam, ../OUTPUTS/MAPPING/SRR5660045.bam, ../OUTPUTS/BOWTIE2_INDEX/hcmv.1.bt2, ../OUTPUTS/BOWTIE2_INDEX/hcmv.2.bt2, ../OUTPUTS/BOWTIE2_INDEX/hcmv.3.bt2, ../OUTPUTS/BOWTIE2_INDEX/hcmv.4.bt2, ../OUTPUTS/BOWTIE2_INDEX/hcmv.rev.1.bt2, ../OUTPUTS/BOWTIE2_INDEX/hcmv.rev.2.bt2, ../OUTPUTS/TEMP/count.txt, ../OUTPUTS/TEMP/sleuth_report.txt, ../OUTPUTS/LONGEST_CONTIG/SRR5660030.fasta, ../OUTPUTS/LONGEST_CONTIG/SRR5660033.fasta, ../OUTPUTS/LONGEST_CONTIG/SRR5660044.fasta, ../OUTPUTS/LONGEST_CONTIG/SRR5660045.fasta, ../OUTPUTS/TEMP/blast_SRR5660030.done, ../OUTPUTS/TEMP/blast_SRR5660033.done, ../OUTPUTS/TEMP/blast_SRR5660044.done, ../OUTPUTS/TEMP/blast_SRR5660045.done, ../PipelineReport.txt
+    jobid: 0
+    reason: Input files updated by another job: ../OUTPUTS/TEMP/blast_SRR5660033.done, ../OUTPUTS/TEMP/blast_SRR5660045.done, ../OUTPUTS/LONGEST_CONTIG/SRR5660030.fasta, ../OUTPUTS/LONGEST_CONTIG/SRR5660044.fasta, ../OUTPUTS/TEMP/blast_SRR5660044.done, ../OUTPUTS/LONGEST_CONTIG/SRR5660033.fasta, ../OUTPUTS/QUANT/SRR5660033, ../OUTPUTS/MAPPING/SRR5660044.bam, ../OUTPUTS/MAPPING/SRR5660033.bam, ../OUTPUTS/MAPPING/SRR5660045.bam, ../OUTPUTS/QUANT/SRR5660044, ../PipelineReport.txt, ../OUTPUTS/QUANT/SRR5660030, ../OUTPUTS/TEMP/sleuth_report.txt, ../OUTPUTS/TEMP/count.txt, ../OUTPUTS/TEMP/blast_SRR5660030.done, ../OUTPUTS/QUANT/SRR5660045
+    resources: tmpdir=/tmp
+
+[Mon Feb 23 16:54:00 2026]
+Finished job 0.
+18 of 18 steps (100%) done
+Complete log: .snakemake/log/2026-02-23T165353.032155.snakemake.log

@@ -2,7 +2,7 @@
 
 # CONFIG
 
-REPORT="../Ofosu_PipelineReport.txt"
+REPORT="../OUTPUTS/TEMP/count.txt"
 RAW_DIR="../TESTS"
 MAP_DIR="../OUTPUTS/MAPPING"
 

@@ -1,104 +1,133 @@
-# Snakefile for HCMV pipeline (CDS extraction, kallisto index, kallisto quant, bowtie2 index, bowtie2 mapping, read counting, spades assembly, longest contig extraction, blastn)
+# Snakefile: Complete HCMV RNA-seq & Assembly Pipeline
+# Steps:
+# 1. Extract CDS from genome
+# 2. Build kallisto index
+# 3. Quantify transcripts (kallisto)
+# 4. Sleuth differential expression
+# 5. Build Bowtie2 genome index
+# 6. Map reads
+# 7. Count mapped reads (shell script generates output)
+# 8. SPAdes transcriptome assembly
+# 9. Extract longest contig
+# 10. BLAST longest contig
+# 11. Merge final report
 
-SAMPLES = ["SRR5660030", "SRR5660033", "SRR5660044", "SRR5660045"] # List of sample names (without _1.fastq or _2.fastq)
+# Sample List
 
-# Rule all: final targets (everything you want to produce)
+SAMPLES = ["SRR5660030", "SRR5660033", "SRR5660044", "SRR5660045"]
+
+
+# Files to merge at end
+
+MERGE_INPUTS = [
+    "../OUTPUTS/TEMP/cd.txt",
+    "../OUTPUTS/TEMP/count.txt",
+    "../OUTPUTS/TEMP/sleuth_report.txt",
+] + expand("../OUTPUTS/TEMP/{sample}.blast.txt", sample=SAMPLES)
+
+
+
+# RULE ALL – Final pipeline targets
+
 rule all:
     input:
-        #"../PipelineReport.txt", # Final report that will contain all results
-        "../OUTPUTS/TEMP/cd.txt", 
+        "../OUTPUTS/CDS/hcmv_cds.fasta", # Extracted CDS sequences
         "../OUTPUTS/INDEX/hcmv.idx", # Kallisto index
-        expand("../OUTPUTS/QUANT/{sample}", sample=SAMPLES), # Kallisto quantification results for each sample
-        "../SCRIPTS/temp.txt", # Log file for sleuth analysis
-        expand("../OUTPUTS/MAPPING/{sample}.bam", sample=SAMPLES), # BAM files from bowtie2 mapping
+        expand("../OUTPUTS/QUANT/{sample}", sample=SAMPLES), # Kallisto quantification outputs
+        "../SCRIPTS/temp.txt",
+        expand("../OUTPUTS/MAPPING/{sample}.bam", sample=SAMPLES), # Bowtie2 mapping outputs
         expand("../OUTPUTS/BOWTIE2_INDEX/hcmv.{suffix}.bt2", 
                suffix=["1", "2", "3", "4", "rev.1", "rev.2"]), # Bowtie2 index files
-        "../OUTPUTS/TEMP/count_reads.tmp", # Temporary file to indicate read counting is done
-        expand("../OUTPUTS/LONGEST_CONTIG/{sample}.fasta", sample=SAMPLES), # Longest contig fasta files for each sample
-        expand("../OUTPUTS/TEMP/blast_{sample}.done", sample=SAMPLES) # Temporary files to indicate blast is done for each sample
-       
+        "../OUTPUTS/TEMP/count.txt", # Read count report from shell script
+        "../OUTPUTS/TEMP/sleuth_report.txt", # Sleuth analysis results
+        expand("../OUTPUTS/LONGEST_CONTIG/{sample}.fasta", sample=SAMPLES), # Longest contigs from SPAdes assembly
+        expand("../OUTPUTS/TEMP/blast_{sample}.done", sample=SAMPLES), # BLAST completion flags
+        "../PipelineReport.txt" # Final merged report
 
 
-# Extract the CDS and count directly into the PipelineReport.txt
-rule extract_cds: # Extract CDS sequences from the genome and count them, appending results to PipelineReport.txt
+# 1. Extract CDS sequences from genome
+
+rule extract_cds:
     input:
-        fasta="../GCF_000845245.1/genomic.fna", # FASTA file containing the genome sequence
-        gff="../GCF_000845245.1/genomic.gff" # GFF file containing CDS annotations
-    output:
+        fasta="../GCF_000845245.1/genomic.fna", # Genome FASTA file
+        gff="../GCF_000845245.1/genomic.gff" # Genome annotation GFF file
+    output: 
         cds="../OUTPUTS/CDS/hcmv_cds.fasta", # Output FASTA file for extracted CDS sequences
-        report="../OUTPUTS/TEMP/cd.txt" # Output report file to append the CDS count results
-        
-    #in the shell command, 
-    # create the output directory if it doesn't exist, run the extract_cds.py script to extract the CDS sequences and count them,
-    # and append the results to the PipelineReport.txt file. 
+        report="../OUTPUTS/TEMP/cd.txt" # Report file for logging CDS extraction details
     shell:
         """
-    
-        mkdir -p ../OUTPUTS/CDS 
-        mkdir -p ../OUTPUTS/TEMP
+        mkdir -p ../OUTPUTS/CDS ../OUTPUTS/TEMP
 
         python ../SCRIPTS/extract_cds.py \
             -i {input.fasta} \
             -a {input.gff} \
             -o {output.cds} \
             -c {output.report}
-        cat {output.report} >> ../Ofosu_PipelineReport.txt
-        echo "" >> ../Ofosu_PipelineReport.txt
-        
         """
 
-# Build the transcriptome index using the extracted CDS sequences
+
+# 2. Build kallisto index
+
 rule build_index:
     input:
-        cds="../OUTPUTS/CDS/hcmv_cds.fasta" # Input FASTA file containing the extracted CDS sequences
+        "../OUTPUTS/CDS/hcmv_cds.fasta" # Input FASTA file containing CDS sequences
     output:
-        index="../OUTPUTS/INDEX/hcmv.idx" # Output file for the kallisto index
+        "../OUTPUTS/INDEX/hcmv.idx" # Kallisto index file
     shell:
-        """     
+        """
         mkdir -p ../OUTPUTS/INDEX
-        kallisto index --make-unique -i {output.index} {input.cds}
+        kallisto index --make-unique \
+            -i {output} {input}
         """
 
-# Quantify expression levels for all samples
+
+
+# 3. Kallisto quantification (per sample)
+
 rule kallisto_quant:
     input:
-        index="../OUTPUTS/INDEX/hcmv.idx", 
-        r1="../TESTS/{sample}_1.fastq", # Input FASTQ file for read 1 of the paired-end data for each sample
-        r2="../TESTS/{sample}_2.fastq" # Input FASTQ file for read 2 of the paired-end data for each sample
+        index="../OUTPUTS/INDEX/hcmv.idx", # Kallisto index file
+        r1="../TESTS/{sample}_1.fastq", # Paired-end FASTQ files for each sample
+        r2="../TESTS/{sample}_2.fastq" # Paired-end FASTQ files for each sample
     output:
-        folder=directory("../OUTPUTS/QUANT/{sample}") # Output directory for kallisto quantification results for each sample
+        directory("../OUTPUTS/QUANT/{sample}")
     shell:
         """
-        kallisto quant -i {input.index} \
-        -o {output.folder} \
-        -b 30 \
-        {input.r1} \
-        {input.r2}
+        kallisto quant -i {input.index} -o {output} -b 30 {input.r1} {input.r2}
         """
 
-#Rscript for sleuth analysis
+
+
+# 4. Sleuth Differential Expression Analysis
 
 rule sleuth_analysis:
     input:
-        folders=expand("../OUTPUTS/QUANT/{sample}", sample=SAMPLES), # Input directories for kallisto quantification results for all samples
-        script="../SCRIPTS/sleuth_analysis.R" # R script that performs the sleuth analysis using the kallisto quantification results
+        quant=expand("../OUTPUTS/QUANT/{sample}", sample=SAMPLES), # Kallisto quantification outputs for all samples
+        script="../SCRIPTS/sleuth_analysis.R" # R script for performing Sleuth analysis
     output:
-        log="../SCRIPTS/temp.txt"
-        
+        "../OUTPUTS/TEMP/sleuth_report.txt" # Output report file for Sleuth analysis results
     shell:
-        "Rscript {input.script} > {output.log} 2>&1"
+        """
+        mkdir -p ../OUTPUTS/TEMP
+        Rscript {input.script} 
+        """
+
+# 5. Build Bowtie2 genome index
 
 rule bowtie2_index:
     input:
-        fasta="../GCF_000845245.1/genomic.fna" # Input FASTA file containing the genome sequence to be indexed for bowtie2
+        "../GCF_000845245.1/genomic.fna" # Genome FASTA file to be indexed
     output:
         expand("../OUTPUTS/BOWTIE2_INDEX/hcmv.{suffix}.bt2",
-               suffix=["1", "2", "3", "4", "rev.1", "rev.2"]) # Output files for the bowtie2 index (6 files with suffixes 1, 2, 3, 4, rev.1, rev.2)
+               suffix=["1", "2", "3", "4", "rev.1", "rev.2"]) # Bowtie2 index files (6 total)
     shell:
         """
         mkdir -p ../OUTPUTS/BOWTIE2_INDEX
-        bowtie2-build {input.fasta} ../OUTPUTS/BOWTIE2_INDEX/hcmv
+        bowtie2-build {input} ../OUTPUTS/BOWTIE2_INDEX/hcmv
         """
+
+
+# 6. Map reads using Bowtie2 (per sample)
 
 rule mapping:
     input:
@@ -107,75 +136,84 @@ rule mapping:
         r1="../TESTS/{sample}_1.fastq",
         r2="../TESTS/{sample}_2.fastq"
     output:
-        bam="../OUTPUTS/MAPPING/{sample}.bam" # Output BAM file for the mapped reads for each sample
+        "../OUTPUTS/MAPPING/{sample}.bam"
     shell:
         """
         mkdir -p ../OUTPUTS/MAPPING
+
         bowtie2 -x ../OUTPUTS/BOWTIE2_INDEX/hcmv \
             -1 {input.r1} -2 {input.r2} \
-        | samtools view -bS - > {output.bam}
+        | samtools view -bS - \
+        > {output}
         """
+
+
+
+# 7. Count mapped reads
+# (Output file is created inside the shell script)
 
 rule count_reads:
     input:
-        expand("../OUTPUTS/MAPPING/{sample}.bam", sample=SAMPLES), # Input BAM files for all samples that have been mapped using bowtie2
-        expand("../TESTS/{sample}_1.fastq", sample=SAMPLES), # Input FASTQ files for read 1 of the paired-end data for all samples
-        expand("../TESTS/{sample}_2.fastq", sample=SAMPLES) # Input FASTQ files for read 2 of the paired-end data for all samples
-
+        expand("../OUTPUTS/MAPPING/{sample}.bam", sample=SAMPLES)
     output:
-        "../OUTPUTS/TEMP/count_reads.tmp"
+        "../OUTPUTS/TEMP/count.txt"
     shell:
         """
-        bash ../SCRIPTS/count_reads.sh 
-        touch {output}
+        bash ../SCRIPTS/count_reads.sh
         """
 
-rule spades_assembly: # Run SPAdes assembly for each sample using the paired-end FASTQ files as input, and output the assembled transcripts in a FASTA file for each sample with a kmer size of 127
+
+
+# 8. SPAdes Assembly (per sample)
+
+rule spades_assembly:
     input:
         r1="../TESTS/{sample}_1.fastq",
         r2="../TESTS/{sample}_2.fastq"
     output:
-        transcripts="../OUTPUTS/SPADES/{sample}/transcripts.fasta"
+        "../OUTPUTS/SPADES/{sample}/transcripts.fasta"
     shell:
         """
         spades.py \
             --only-assembler \
-            -k 127 \
             --rna \
+            -k 127 \
             -1 {input.r1} \
             -2 {input.r2} \
             -o ../OUTPUTS/SPADES/{wildcards.sample}
         """
 
-rule longest_contig: # Extract the longest contig from the SPAdes assembly results for each sample and save it in a separate FASTA file
+
+
+# 9. Extract Longest Contig (per sample)
+
+rule longest_contig:
     input:
-        fasta="../OUTPUTS/SPADES/{sample}/transcripts.fasta"
+        "../OUTPUTS/SPADES/{sample}/transcripts.fasta"
     output:
-        out="../OUTPUTS/LONGEST_CONTIG/{sample}.fasta"
+        "../OUTPUTS/LONGEST_CONTIG/{sample}.fasta"
     shell:
         """
         mkdir -p ../OUTPUTS/LONGEST_CONTIG
+
         python ../SCRIPTS/longest_contig.py \
-            -i {input.fasta} \
-            -o {output.out}
+            -i {input} \
+            -o {output}
         """
 
+# 10. BLAST Longest Contig (per sample)
 
-
-rule blast_longest_contig: # Run blastn for the longest contig of each sample against the genome database, and save the results in a text file for each sample
+rule blast_longest_contig:
     input:
         query="../OUTPUTS/LONGEST_CONTIG/{sample}.fasta",
-        db_files=expand(
-            "../BLAST/genome.{suffix}",
-            suffix=["nhr", "nin", "nsq"]
-        )
+        db_files=expand("../BLAST/genome.{suffix}",
+                        suffix=["nhr", "nin", "nsq"]) # BLAST database files
     output:
-        report="../OUTPUTS/BLAST_RESULTS/{sample}.blast.txt",
-        done="../OUTPUTS/TEMP/blast_{sample}.done"
-
+        report="../OUTPUTS/TEMP/{sample}.blast.txt", # BLAST output report for each sample
+        done="../OUTPUTS/TEMP/blast_{sample}.done" # Flag file to indicate BLAST completion
     shell:
         """
-        mkdir -p ../OUTPUTS/BLAST_RESULTS
+        mkdir -p ../OUTPUTS/TEMP
 
         echo "{wildcards.sample}:" > {output.report}
         echo -e "sacc\tpident\tlength\tqstart\tqend\tsstart\tsend\tbitscore\tevalue\tstitle" >> {output.report}
@@ -189,7 +227,19 @@ rule blast_longest_contig: # Run blastn for the longest contig of each sample ag
             >> {output.report}
 
         echo "" >> {output.report}
-        
-        cat {output.report} >> ../Ofosu_PipelineReport.txt
         touch {output.done}
+        """
+
+
+
+# 11. Merge Final Pipeline Report
+
+rule merge_reports:
+    input:
+        MERGE_INPUTS # List of all intermediate report files to be merged
+    output:
+        "../PipelineReport.txt" # Final merged report containing all results
+    shell:
+        """
+        cat {input} > {output}
         """
