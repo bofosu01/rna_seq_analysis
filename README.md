@@ -43,6 +43,7 @@ On your Terminal, run in any directory of your choice:
 `git clone https://github.com/bofosu01/rna_seq_analysis.git`
 
 Moving into the directory containing all the files in the github repository
+
 `cd rna_seq_analysis`
 
 ```{=html}
@@ -102,6 +103,7 @@ drwxr-xr-x  3 bofosu student 4.0K Feb 22 19:25 SNAKEMAKE
 drwxr-xr-x  2 bofosu student 4.0K Feb 22 19:15 TESTS
 
 ```
+
 
 
 
