@@ -100,7 +100,7 @@ snakemake --cores 4
 
 ### Results
 
-```{=html}
+```{=pdf}
 
 total 32K
 drwxr-xr-x  2 bofosu student 4.0K Feb 22 19:15 BLAST
@@ -120,6 +120,7 @@ drwxr-xr-x  3 bofosu student 4.0K Feb 22 19:25 SNAKEMAKE
 drwxr-xr-x  2 bofosu student 4.0K Feb 22 19:15 TESTS
 
 ```
+
 
 
 
