@@ -1,0 +1,79 @@
+- STAGE: Before start
+  args: []
+  config_dir: ''
+  del_after: []
+  output_files: []
+  path: 'true'
+  short_name: before_start
+- STAGE: Assembling
+  args: []
+  config_dir: ''
+  del_after: []
+  output_files: []
+  path: 'true'
+  short_name: as_start
+- STAGE: K127
+  args:
+  - /home/bofosu/rna_seq_analysis/OUTPUTS/SPADES/SRR5660044/K127/configs/config.info
+  - /home/bofosu/rna_seq_analysis/OUTPUTS/SPADES/SRR5660044/K127/configs/mda_mode.info
+  - /home/bofosu/rna_seq_analysis/OUTPUTS/SPADES/SRR5660044/K127/configs/rna_mode.info
+  config_dir: K127
+  del_after: []
+  output_files: []
+  path: /usr/libexec/spades/spades-core
+  short_name: k127
+- STAGE: Copy files
+  args:
+  - /usr/share/spades/spades_pipeline/scripts/copy_files.py
+  - /home/bofosu/rna_seq_analysis/OUTPUTS/SPADES/SRR5660044/K127/before_rr.fasta
+  - /home/bofosu/rna_seq_analysis/OUTPUTS/SPADES/SRR5660044/before_rr.fasta
+  - /home/bofosu/rna_seq_analysis/OUTPUTS/SPADES/SRR5660044/K127/assembly_graph_after_simplification.gfa
+  - /home/bofosu/rna_seq_analysis/OUTPUTS/SPADES/SRR5660044/assembly_graph_after_simplification.gfa
+  - /home/bofosu/rna_seq_analysis/OUTPUTS/SPADES/SRR5660044/K127/transcripts.fasta
+  - /home/bofosu/rna_seq_analysis/OUTPUTS/SPADES/SRR5660044/transcripts.fasta
+  - /home/bofosu/rna_seq_analysis/OUTPUTS/SPADES/SRR5660044/K127/transcripts.paths
+  - /home/bofosu/rna_seq_analysis/OUTPUTS/SPADES/SRR5660044/transcripts.paths
+  - /home/bofosu/rna_seq_analysis/OUTPUTS/SPADES/SRR5660044/K127/assembly_graph_with_scaffolds.gfa
+  - /home/bofosu/rna_seq_analysis/OUTPUTS/SPADES/SRR5660044/assembly_graph_with_scaffolds.gfa
+  - /home/bofosu/rna_seq_analysis/OUTPUTS/SPADES/SRR5660044/K127/assembly_graph.fastg
+  - /home/bofosu/rna_seq_analysis/OUTPUTS/SPADES/SRR5660044/assembly_graph.fastg
+  - /home/bofosu/rna_seq_analysis/OUTPUTS/SPADES/SRR5660044/K127/hard_filtered_final_paths.fasta
+  - /home/bofosu/rna_seq_analysis/OUTPUTS/SPADES/SRR5660044/hard_filtered_transcripts.fasta
+  - /home/bofosu/rna_seq_analysis/OUTPUTS/SPADES/SRR5660044/K127/soft_filtered_final_paths.fasta
+  - /home/bofosu/rna_seq_analysis/OUTPUTS/SPADES/SRR5660044/soft_filtered_transcripts.fasta
+  config_dir: ''
+  del_after:
+  - .bin_reads
+  - tmp/spades_kgspl6rk
+  output_files: []
+  path: /usr/bin/python3
+  short_name: copy_files
+- STAGE: Assembling
+  args: []
+  config_dir: ''
+  del_after: []
+  output_files: []
+  path: 'true'
+  short_name: as_finish
+- STAGE: Breaking scaffolds
+  args:
+  - /usr/share/spades/spades_pipeline/scripts/breaking_scaffolds_script.py
+  - --result_scaffolds_filename
+  - /home/bofosu/rna_seq_analysis/OUTPUTS/SPADES/SRR5660044/scaffolds.fasta
+  - --misc_dir
+  - /home/bofosu/rna_seq_analysis/OUTPUTS/SPADES/SRR5660044/misc
+  - --threshold_for_breaking_scaffolds
+  - '3'
+  config_dir: ''
+  del_after: []
+  output_files: []
+  path: /usr/bin/python3
+  short_name: bs
+- STAGE: Terminate
+  args: []
+  config_dir: ''
+  del_after:
+  - configs
+  output_files: []
+  path: 'true'
+  short_name: terminate

@@ -1,0 +1,8 @@
+SRR5660044:
+sacc	pident	length	qstart	qend	sstart	send	bitscore	evalue	stitle
+EF999921.1	99.949	1977	1	1977	41802	43778	3646	0.0	EF999921.1 Human herpesvirus 5 strain TB40/E clone TB40-BAC4, complete sequence
+GQ465282.1	99.949	1977	1	1977	7168	9144	3646	0.0	GQ465282.1 Human herpesvirus 5 strain TB40/E, partial genome
+KF297339.1	99.949	1977	1	1977	9761	11737	3646	0.0	KF297339.1 Human herpesvirus 5 strain TB40/E clone Lisa, complete genome
+KX544839.1	99.949	1977	1	1977	41791	43767	3646	0.0	KX544839.1 Human betaherpesvirus 5 isolate TB40-E_UNC, complete genome
+MT070140.1	99.949	1977	1	1977	9532	11508	3646	0.0	MT070140.1 UNVERIFIED: Human betaherpesvirus 5 isolate P10, complete genome
+
