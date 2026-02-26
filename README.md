@@ -2,7 +2,19 @@
 
 ## Overview
 
-This repository contains a snakemake-based pipeline for RNA-Seq analysis of Human Cytomegalovirus (HCMV) transcriptomes to quantify expression, identify differentially expressed genes across two timepoints (2dpi vs 6dpi), assemble viral reads, and determine strain similarity using BLASTn.
+This repository contains a reproducible Snakemake-based Python pipeline for analyzing Human cytomegalovirus (HCMV; Human cytomegalovirus) transcriptomes from RNA-seq data.
+
+## Overview of Analysis
+
+We compare HCMV transcriptomes from;
+
+| Donor   | Timepoint | SRA Accession |
+|---------|-----------|---------------|
+| Donor 1 | 2 dpi     | SRR5660030    |
+| Donor 1 | 6 dpi     | SRR5660033    |
+| Donor 3 | 2 dpi     | SRR5660044    |
+| Donor 3 | 6 dpi     | SRR5660045    |
+
 
 All the results are summarized in a single output file called **`Ofosu_PipelineReport.txt`**
 
@@ -11,6 +23,7 @@ All the results are summarized in a single output file called **`Ofosu_PipelineR
 ## For each sample, the pipeline performs the following steps:
 
 ---
+-   Download SRA reads and converted to fastq (Documented only)
 -   Extracts coding sequences (CDS) sequences from the HCMV reference genome
 -   Builds a kallisto transcriptome index
 -   Quantifies transcript expression using kallisto
@@ -20,8 +33,29 @@ All the results are summarized in a single output file called **`Ofosu_PipelineR
 -   Counts reads before and after mapping
 -   Assembles RNA reads using SPAdes
 -   Extracts the longest contig from each assembly
--   Runs BLASTN of the longest contig against a Betaherpesvirinae nucleotide database 
+-   Runs BLASTN of the longest contig against a Betaherpesvirinae nucleotide database
+-   Generate a `PipelineReport.txt`
 ---
+
+## Download SRA Data
+```{html}
+# Example for one sample
+fasterq-dump SRR5660030 --split-files
+
+```
+
+Repeat for :
+
+-  SRR5660030
+
+-  SRR5660033
+
+-  SRR5660044
+
+-  SRR5660045
+
+  These files were subsumpled into `TESTS/` used in the pipeline
+  
 
 ## Dependencies
 
@@ -120,6 +154,7 @@ drwxr-xr-x  3 bofosu student 4.0K Feb 22 19:25 SNAKEMAKE
 drwxr-xr-x  2 bofosu student 4.0K Feb 22 19:15 TESTS
 
 ```
+
 
 
 
