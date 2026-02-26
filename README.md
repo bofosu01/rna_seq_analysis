@@ -44,7 +44,7 @@ fasterq-dump SRR5660030 --split-files
 
 ```
 
-Repeat for :
+Repeated for :
 
 -  SRR5660030
 
@@ -54,8 +54,8 @@ Repeat for :
 
 -  SRR5660045
 
-  These files were subsumpled into `TESTS/` used in the pipeline
-  
+  These files were subsampled into `TESTS/` used in the pipeline
+
 
 ## Dependencies
 
@@ -154,6 +154,7 @@ drwxr-xr-x  3 bofosu student 4.0K Feb 22 19:25 SNAKEMAKE
 drwxr-xr-x  2 bofosu student 4.0K Feb 22 19:15 TESTS
 
 ```
+
 
 
 
